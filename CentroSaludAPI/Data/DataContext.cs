@@ -12,7 +12,7 @@ namespace CentroSaludAPI.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=.\\SQL2014;Database=centro_salud;Trusted_Connection=true;TrustServerCertificate=true;");
+            optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=centro_salud;Trusted_Connection=true;TrustServerCertificate=true;");
         }
 
         public DbSet<Doctor> Doctors { get; set; }
