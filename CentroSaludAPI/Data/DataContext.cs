@@ -13,8 +13,13 @@ namespace CentroSaludAPI.Data
         {
             base.OnConfiguring(optionsBuilder);
             optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=centro_salud;Trusted_Connection=true;TrustServerCertificate=true;");
+
         }
 
+        
         public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Municipio> Municipio { get; set; }
+        public DbSet<Paciente> Paciente { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
     }
 }

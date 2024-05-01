@@ -1,6 +1,9 @@
 global using CentroSaludAPI.Models;
 global using CentroSaludAPI.Data;
 using CentroSaludAPI.Services.DoctorService;
+using CentroSaludAPI.Services.MunicipioService;
+using CentroSaludAPI.Services.PacienteService;
+using CentroSaludAPI.Services.UsuarioService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,9 @@ builder.Services.AddSwaggerGen();
 
 //Se agrego para usar los services
 builder.Services.AddScoped<IDoctorService,DoctorService>();
+builder.Services.AddScoped<IMunicipioService, MunicipioService>();
+builder.Services.AddScoped<IPacienteService, PacienteService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 // se agrego para el contexto de la base de datos a usar
 builder.Services.AddDbContext<DataContext>();
 var app = builder.Build();
