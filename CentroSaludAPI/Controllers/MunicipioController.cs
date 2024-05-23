@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CentroSaludAPI.Services.MunicipioService;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CentroSaludAPI.Controllers
-{
+{   
     [Route("api/[controller]")]
     [ApiController]
 
@@ -14,7 +15,7 @@ namespace CentroSaludAPI.Controllers
         {
             _municipioService = municipioService;
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<Municipio>>> GetMunicipios()
         {

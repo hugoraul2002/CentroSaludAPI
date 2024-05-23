@@ -4,6 +4,7 @@ using CentroSaludAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CentroSaludAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240506161634_Rol")]
+    partial class Rol
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,29 +158,6 @@ namespace CentroSaludAPI.Migrations
                     b.ToTable("Usuario");
                 });
 
-            modelBuilder.Entity("CentroSaludAPI.Models.UsuarioRol", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("RolId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RolId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("UsuarioRol");
-                });
-
             modelBuilder.Entity("CentroSaludAPI.Models.Paciente", b =>
                 {
                     b.HasOne("CentroSaludAPI.Models.Municipio", "Municipio")
@@ -187,25 +167,6 @@ namespace CentroSaludAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Municipio");
-                });
-
-            modelBuilder.Entity("CentroSaludAPI.Models.UsuarioRol", b =>
-                {
-                    b.HasOne("CentroSaludAPI.Models.Rol", "Rol")
-                        .WithMany()
-                        .HasForeignKey("RolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CentroSaludAPI.Models.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Rol");
-
-                    b.Navigation("Usuario");
                 });
 #pragma warning restore 612, 618
         }

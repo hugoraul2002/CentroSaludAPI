@@ -9,5 +9,7 @@
         public string apellido { get; set; } = string.Empty;
         public string telefono { get; set; } = string.Empty;
         public string direccion { get; set; } = string.Empty;
+
+        public ICollection<UsuarioRol> UsuarioRoles { get; set; }
     }
 }

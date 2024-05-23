@@ -21,5 +21,7 @@ namespace CentroSaludAPI.Data
         public DbSet<Municipio> Municipio { get; set; }
         public DbSet<Paciente> Paciente { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<Rol> Rol { get; set; }
+        public DbSet<UsuarioRol> UsuarioRol { get; set; }   
     }
 }
