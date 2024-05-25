@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using BCrypt.Net;
 namespace CentroSaludAPI.Services.UsuarioService
 {
     public class UsuarioService : IUsuarioService
@@ -27,6 +27,12 @@ namespace CentroSaludAPI.Services.UsuarioService
         //agregar un usuario
         public async Task<Usuario> AddUsuario(Usuario usuario)
         {
+            if (await _context.Usuario.AnyAsync(u => u.username == usuario.username))
+            {
+                throw new ArgumentException("El nombre de usuario ya existe.");
+            }
+            usuario.password = BCrypt.Net.BCrypt.HashPassword(usuario.password);
+
             await _context.Usuario.AddAsync(usuario);
             await _context.SaveChangesAsync();
             return usuario;

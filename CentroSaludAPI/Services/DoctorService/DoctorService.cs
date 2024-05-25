@@ -22,9 +22,14 @@ namespace CentroSaludAPI.Services.DoctorService
             return doctor;
         }
 
-        public Task<List<Doctor>> DeleteDoctors(int id)
+        public async Task<List<Doctor>> DeleteDoctors(int id)
         {
-            throw new NotImplementedException();
+            var doctor = await _context.Doctors.FindAsync(id);
+            if (doctor == null)
+                throw new Exception("Doctor no encontrado");
+            _context.Doctors.Remove(doctor);
+            await _context.SaveChangesAsync();
+            return await GetDoctors();
         }
 
         public async Task<Doctor?> GetDoctor(int id)

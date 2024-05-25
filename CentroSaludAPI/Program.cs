@@ -43,6 +43,7 @@
 
 
 global using CentroSaludAPI.Models;
+global using CentroSaludAPI.DTO;
 global using CentroSaludAPI.Data;
 using CentroSaludAPI.Services.DoctorService;
 using CentroSaludAPI.Services.MunicipioService;
@@ -55,6 +56,10 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using CentroSaludAPI.Services.UsuarioRolService;
+using CentroSaludAPI.Services.CitaService;
+using CentroSaludAPI.Services.VacunaService;
+using CentroSaludAPI.Services.TarjetaVacunacionService;
+using CentroSaludAPI.Services.DetalleTarjetaService;
 //using CentroSaludAPI.Services.UsuarioRolService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,6 +79,10 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IRolService, RolService>();
 builder.Services.AddScoped<IAutorizacionService, AutorizacionService>();
 builder.Services.AddScoped<IUsuarioRolService, UsuarioRolService>();
+builder.Services.AddScoped<ICitaService, CitaService>();
+builder.Services.AddScoped<IVacunaService, VacunaService>();
+builder.Services.AddScoped<ITarjetaVacunacionService, TarjetaVacunacionService>();
+builder.Services.AddScoped<IDetalleTarjetaService, DetalleTarjetaService>();
 
 var key = builder.Configuration.GetValue<string>("JwtSetting:key");
 var keyBytes = Encoding.ASCII.GetBytes(key);
@@ -104,10 +113,9 @@ builder.Services.AddDbContext<DataContext>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("http://localhost:4200") // URL de tu aplicación Angular
+        builder => builder.WithOrigins("*") 
                           .AllowAnyMethod()
-                          .AllowAnyHeader()
-                          .AllowCredentials());
+                          .AllowAnyHeader());
 });
 
 var app = builder.Build();

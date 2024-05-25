@@ -15,7 +15,6 @@ namespace CentroSaludAPI.Controllers
         {
             _municipioService = municipioService;
         }
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<Municipio>>> GetMunicipios()
         {

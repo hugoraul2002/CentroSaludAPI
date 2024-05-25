@@ -1,4 +1,5 @@
-﻿using CentroSaludAPI.Services.UsuarioService;
+﻿using CentroSaludAPI.DTO;
+using CentroSaludAPI.Services.UsuarioService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CentroSaludAPI.Controllers
@@ -36,12 +37,21 @@ namespace CentroSaludAPI.Controllers
 
         // Agregar un nuevo usuario
         [HttpPost]
-        public async Task<IActionResult> AddUsuario([FromBody] Usuario usuario)
+        public async Task<IActionResult> AddUsuario([FromBody] UsuarioDTO usuarioDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            var usuario = new Usuario
+            {
+                username = usuarioDto.Username,
+                password = usuarioDto.Password,
+                nombre = usuarioDto.Nombre,
+                apellido = usuarioDto.Apellido,
+                telefono = usuarioDto.Telefono,
+                direccion = usuarioDto.Direccion
+            };
             var createdUsuario = await _usuarioService.AddUsuario(usuario);
             return CreatedAtAction(nameof(GetUsuarioById), new { id = createdUsuario.Id }, createdUsuario);
         }

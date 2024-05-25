@@ -21,42 +21,15 @@ namespace CentroSaludAPI.Services.Jwt
             _configuration = configuration;
         }
 
-        //private string GenerarToken(string idUsuario, string userName)
-        //{
-        //    var key = _configuration.GetValue<string>("JwtSetting:key");
-        //    var keyBytes = Encoding.ASCII.GetBytes(key);
 
-        //    var claims = new ClaimsIdentity(new[]
-        //    {
-        //new Claim(ClaimTypes.NameIdentifier, idUsuario),
-        //new Claim(ClaimTypes.Name, userName)
-        // });
-
-        //    var credencialesToken = new SigningCredentials(
-        //        new SymmetricSecurityKey(keyBytes),
-        //        SecurityAlgorithms.HmacSha256Signature
-        //    );
-
-        //    var tokenDescriptor = new SecurityTokenDescriptor
-        //    {
-        //        Subject = claims,
-        //        Expires = DateTime.UtcNow.AddMinutes(1),
-        //        SigningCredentials = credencialesToken
-        //    };
-
-        //    var tokenHandler = new JwtSecurityTokenHandler();
-        //    var tokenConfig = tokenHandler.CreateToken(tokenDescriptor);
-
-        //    string tokenCreado = tokenHandler.WriteToken(tokenConfig);
-
-        //    return tokenCreado;
-        //}
 
         private string GenerarToken(string idUsuario, string userName,string rol)
         {
             var key = _configuration.GetValue<string>("JwtSetting:key");
             var keyBytes = Encoding.ASCII.GetBytes(key);
-
+            Console.WriteLine($"idUsuario: {idUsuario ?? "null"}");
+            Console.WriteLine($"userName: {userName ?? "null"}");
+            Console.WriteLine($"rol: {rol ?? "null"}");
             var claims = new ClaimsIdentity(new[]
             {
         new Claim(ClaimTypes.NameIdentifier, idUsuario),
@@ -110,17 +83,19 @@ namespace CentroSaludAPI.Services.Jwt
                 .Include(u => u.UsuarioRoles) // Incluye la relación con UsuarioRoles
                 .ThenInclude(ur => ur.Rol) // Incluye la relación con Rol a través de UsuarioRol
                 .FirstOrDefault(x =>
-                    x.username == autorizacion.NombreUsuario &&
-                    x.password == autorizacion.Clave
+                    x.username == autorizacion.NombreUsuario
                 );
-
-            if (usuario_encontrado == null)
+            Console.WriteLine("HOLA VERIFICA PASSWORD:");
+            Console.WriteLine(usuario_encontrado);
+            Console.WriteLine(BCrypt.Net.BCrypt.Verify(autorizacion.Clave, usuario_encontrado.password));
+            if (usuario_encontrado == null || !BCrypt.Net.BCrypt.Verify(autorizacion.Clave, usuario_encontrado.password))
             {
                 return await Task.FromResult<AutorizacionResponse>(null);
             }
 
             var rol = usuario_encontrado.UsuarioRoles.FirstOrDefault()?.Rol; // Obtén el primer rol asociado al usuario
-
+            Console.WriteLine(rol);
+            Console.WriteLine(usuario_encontrado);
             string tokenCreado = GenerarToken(usuario_encontrado.Id.ToString(), usuario_encontrado.username, rol?.Nombre);
 
             return new AutorizacionResponse() { Token = tokenCreado, Resultado = true, Msg = "ok" };
